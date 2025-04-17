@@ -57,7 +57,7 @@ char *inputCode() {
         scanf("%4s", input);
         toUppercase(input);
 
-    } while (validateInput(input));
+    } while (!validateInput(input));
 
     return input;
 }
