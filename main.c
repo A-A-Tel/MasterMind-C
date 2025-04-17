@@ -18,6 +18,11 @@ void toUppercase(char* str) {
 char *generateCode() {
 
     char *code = malloc((codeLength+1) * sizeof(char));
+    if (code == NULL) {
+        printf("Malloc Failure\n");
+        exit(1);
+    }
+
     srand(time(NULL));
 
     for (int i = 0; i < codeLength; i++) {
@@ -29,7 +34,10 @@ char *generateCode() {
 }
 
 bool validateInput(const char *input) {
-    if (strlen(input) != codeLength) return false;
+    if (strlen(input) != codeLength) {
+        printf("Invalid input, try again...\n");
+        return false;
+    }
 
     for (int i = 0; i < codeLength; i++) {
         bool isValidChar = false;
@@ -39,7 +47,10 @@ bool validateInput(const char *input) {
                 break;
             }
         }
-        if (!isValidChar) return false;
+        if (!isValidChar) {
+            printf("Invalid input, try again...\n");
+            return false;
+        }
     }
 
     return true;
@@ -52,7 +63,6 @@ char *inputCode() {
         printf("Malloc failure\n");
         exit(1);
     }
-
     do {
         scanf("%4s", input);
         toUppercase(input);
@@ -62,17 +72,43 @@ char *inputCode() {
     return input;
 }
 
+void evaluateInput(const char *input,const char *code) {
+    unsigned long score = 0;
+    char *eval = malloc((codeLength + 1) * sizeof(char));
+    for (int i = 0; input[i]; i++) {
+        eval[i] = '-';
+        if (input[i] == code[i]) {
+            eval[i] = 'B';
+            score++;
+        } else {
+            for (int j = 0; j < codeLength; j++) {
+                if (i != j && input[i] == code[j]) {
+                    eval[i] = 'W';
+                }
+            }
+        }
+    }
+    eval[codeLength] = '\0';
+    printf("%s\n", eval);
+    free(eval);
+
+    if (score == codeLength) {
+        printf("Congrats! You have cracked the code!\n");
+        exit(0);
+    }
+}
+
 int main() {
 
     char *code = generateCode();
-    printf("%s\n", code);
 
-    char *input =  inputCode();
-    printf("%s\n", input);
-
-
+    for (int i = 1; i <= tries; i++) {
+        printf("Try: %d\nChoose from the colors '%s'\nEnter code with length %lu...\n", i, colors, codeLength);
+        char *input = inputCode();
+        evaluateInput(input, code);
+        free(input);
+    }
 
     free(code);
-    free(input);
     return 0;
 }
