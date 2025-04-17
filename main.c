@@ -93,6 +93,8 @@ void evaluateInput(const char *input,const char *code) {
 
     if (score == codeLength) {
         printf("Congrats! You have cracked the code!\n");
+        free(input);
+        free(code);
         exit(0);
     }
 }
@@ -107,6 +109,7 @@ int main() {
         evaluateInput(input, code);
         free(input);
     }
+    printf("Lol skill issue\nThe code was: %s\n", code);
 
     free(code);
     return 0;
