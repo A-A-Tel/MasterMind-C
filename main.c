@@ -52,7 +52,6 @@ bool validateInput(const char *input) {
             return false;
         }
     }
-
     return true;
 }
 
@@ -89,7 +88,7 @@ void evaluateInput(const char *input,const char *code) {
         }
     }
     eval[codeLength] = '\0';
-    printf("%s\n", eval);
+    printf("%s\n%s\n", input, eval);
     free(eval);
 
     if (score == codeLength) {
